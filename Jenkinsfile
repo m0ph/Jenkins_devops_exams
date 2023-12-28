@@ -37,6 +37,7 @@ stages {
                 sleep 5
                 docker run -d --name movie-service --rm --network test_network --env DATABASE_URI=postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev --env CAST_SERVICE_HOST_URL=http://cast_service:8000/api/v1/casts/ $DOCKER_ID/$DOCKER_IMAGE_MOVIE:$DOCKER_TAG
                 sleep 5
+                docker run -d --name nginx --network test_network --volume "$(PWD)"/nginx_config.conf:/etc/nginx/conf.d/default.conf nginx:latest
                 '''
             }
         }
@@ -47,10 +48,25 @@ stages {
                 sh '''
                 docker run --rm --network test_network curlimages/curl:latest -L -v http://movie_service:8000
                 docker run --rm --network test_network curlimages/curl:latest -L -v http://cast_service:8000
+                docker run --rm --network test_network curlimages/curl:latest -L -v http://nginx:8080/api/v1/movies
+                docker run --rm --network test_network curlimages/curl:latest -L -v http://nginx:8080/api/v1/casts
                 '''
             }
         }
     }
-    stage('Docker push')
+    stage('Docker push'){
+        environment {
+            DOCKER_PASS = credentials("DOCKER_HUB_PASS")
+        }
+        steps {
+            script {
+                sh '''
+                docker login -u $DOCKER_ID -p $DOCKER_PASS
+                docker push $DOCKER_ID/$DOCKER_IMAGE_MOVIE:$DOCKER_TAG
+                docker push $DOCKER_ID/$DOCKER_IMAGE_CAST:$DOCKER_TAG
+                '''
+            }
+        }
+    }
 }
 }
