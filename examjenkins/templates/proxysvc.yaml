@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  selector:
+    app: {{ .Release.Name }}-proxy
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.proxy.port }}
+      targetPort: {{ .Values.service.proxy.port }}

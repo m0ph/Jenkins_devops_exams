@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: {{ .Release.Name }}-castdb
-          image: "{{ .Values.image.db.repository }}:12.1-apline"
+          image: "{{ .Values.image.db.repository }}:{{ .Values.image.db.tag | default .Chart.AppVersion }}"
           ports:
             - name: postgres
               containerPort: {{ .Values.service.db.port }}
