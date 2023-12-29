@@ -86,7 +86,63 @@ stages {
             }
         }
     }
+    stage('Deploy to QA'){
+        environment {
+            KUBECONFIG = credentials("config")
+        }
+        steps {
+            script {
+                sh '''
+                rm -Rf .kube
+                mkdir .kube
+                ls
+                cat $KUBECONFIG > .kube/config
+                cp examjenkins/values.yaml values.yml
+                cat values.yml
+                sed -i "s+tag:.*replace.*+tag: ${DOCKER_TAG}+g" values.yml
+                helm upgrade --install app examjenkins --values=values.yml --namespace qa
+                '''
+            }
+        }
+    }
+    stage('Deploy to Staging'){
+        environment {
+            KUBECONFIG = credentials("config")
+        }
+        steps {
+            script {
+                sh '''
+                rm -Rf .kube
+                mkdir .kube
+                ls
+                cat $KUBECONFIG > .kube/config
+                cp examjenkins/values.yaml values.yml
+                cat values.yml
+                sed -i "s+tag:.*replace.*+tag: ${DOCKER_TAG}+g" values.yml
+                helm upgrade --install app examjenkins --values=values.yml --namespace staging
+                '''
+            }
+        }
+    }
+    environment {
+            KUBECONFIG = credentials("config")
+        }
+        steps {
+            timeout(time: 15, unit: "MINUTES") {
+                        input message: 'Do you want to deploy in production ?', ok: 'Yes'
+                    }
+            script {
+                sh '''
+                rm -Rf .kube
+                mkdir .kube
+                ls
+                cat $KUBECONFIG > .kube/config
+                cp examjenkins/values.yaml values.yml
+                cat values.yml
+                sed -i "s+tag:.*replace.*+tag: ${DOCKER_TAG}+g" values.yml
+                helm upgrade --install app examjenkins --values=values.yml --namespace prod
+                '''
+            }
+        }
 }
 }
-
-// 
