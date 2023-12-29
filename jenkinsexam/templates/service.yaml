@@ -1,14 +1,16 @@
+# movie db svc
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "jenkinsexam.fullname" . }}
+  name: movie_db
   labels:
     {{- include "jenkinsexam.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.service.db.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - port: {{ .Values.service.db.port }}
+      targetPort: 5432
       protocol: TCP
       name: http
   selector:
