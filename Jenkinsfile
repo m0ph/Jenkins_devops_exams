@@ -145,4 +145,16 @@ stages {
             }
         }
 }
+    post {
+        failure {
+            sh '''
+            docker stop $(docker ps -a -q)
+            '''
+        }
+        script {
+            sh '''
+            docker stop $(docker ps -a -q)
+            '''
+        }
+    }
 }
