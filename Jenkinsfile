@@ -68,7 +68,26 @@ stages {
             }
         }
     }
+    stage('Deploy toi dev'){
+        environment {
+            KUBECONFIG = credentials("config")
+        }
+        steps {
+            script {
+                sh '''
+                rm -Rf .kube
+                mkdir .kube
+                ls
+                cat $KUBECONFIG > .kube/config
+                cp examjenkins/values.yaml values.yml
+                cat values.yml
+                sed -i "s+tag:.*replace.*+tag: ${DOCKER_TAG}+g" values.yml
+                helm upgrade --install app examjenkins --values=values.yml --namespace dev
+                '''
+            }
+        }
+    }
 }
 }
 
-// sed -i "s+tag:.*replace.*+tag: test+g" values.yml
+// 

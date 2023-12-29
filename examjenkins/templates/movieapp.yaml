@@ -7,7 +7,8 @@ metadata:
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
-    app: {{ .Release.Name }}-movieapp
+    matchLabels:
+      app: {{ .Release.Name }}-movieapp
   template:
     metadata:
       labels:
@@ -20,3 +21,8 @@ spec:
             - name: http
               containerPort: {{ .Values.service.app.port }}
               protocol: TCP
+          env:
+            - name: DATABASE_URI
+              value: postgresql://movie_db_username:movie_db_password@{{ .Release.Name }}-moviedb/movie_db_dev
+            - name: CAST_SERVICE_HOST_URL
+              value: http://{{ .Release.Name }}-moviedb:8000/api/v1/casts/

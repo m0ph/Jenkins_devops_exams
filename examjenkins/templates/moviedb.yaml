@@ -7,7 +7,8 @@ metadata:
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
-    app: {{ .Release.Name }}-moviedb
+    matchLabels:
+      app: {{ .Release.Name }}-moviedb
   template:
     metadata:
       labels:
@@ -20,5 +21,12 @@ spec:
             - name: postgres
               containerPort: {{ .Values.service.db.port }}
               protocol: TCP
+          env:
+            - name: POSTGRES_USER
+              value: movie_db_username
+            - name: POSTGRES_PASSWORD
+              value: movie_db_password
+            - name: POSTGRES_DB
+              value: movie_db_dev
 
   

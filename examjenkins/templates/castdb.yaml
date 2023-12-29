@@ -7,7 +7,8 @@ metadata:
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
-    app: {{ .Release.Name }}-castdb
+    matchLabels:
+      app: {{ .Release.Name }}-castdb
   template:
     metadata:
       labels:
@@ -20,3 +21,10 @@ spec:
             - name: postgres
               containerPort: {{ .Values.service.db.port }}
               protocol: TCP
+          env:
+            - name: POSTGRES_USER
+              value: cast_db_username
+            - name: POSTGRES_PASSWORD
+              value: cast_db_password
+            - name: POSTGRES_DB
+              value: cast_db_dev
