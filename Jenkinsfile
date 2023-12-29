@@ -149,7 +149,11 @@ agent any
     }
     post {
         always {
-            docker stop $(docker ps -a -q)
+            script {
+                sh '''
+                docker stop $(docker ps -a -q)
+                '''
+            }
         }
     }
 }
