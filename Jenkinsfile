@@ -29,7 +29,6 @@ stages {
         steps {
             script {
                 sh '''
-                docker network create test_network
                 docker run -d --name cast_db --rm --network test_network --env POSTGRES_USER=cast_db_username --env POSTGRES_PASSWORD=cast_db_password --env POSTGRES_DB=cast_db_dev postgres:12.1-alpine
                 docker run -d --name movie_db --rm --network test_network --env POSTGRES_USER=movie_db_username --env POSTGRES_PASSWORD=movie_db_password --env POSTGRES_DB=movie_db_dev postgres:12.1-alpine
                 sleep 10
