@@ -124,7 +124,8 @@ stages {
             }
         }
     }
-    environment {
+    stage('Deploy to Production'){
+        environment {
             KUBECONFIG = credentials("config")
         }
         steps {
@@ -144,7 +145,7 @@ stages {
                 '''
             }
         }
-}
+    }
     post {
         failure {
             sh '''
@@ -157,4 +158,5 @@ stages {
             '''
         }
     }
+}
 }
