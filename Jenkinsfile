@@ -34,7 +34,7 @@ stages {
                 sleep 10
                 docker run -d --name cast_service --rm --network test_network --env DATABASE_URI=postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev $DOCKER_ID/$DOCKER_IMAGE_CAST:$DOCKER_TAG
                 sleep 5
-                docker run -d --name movie-service --rm --network test_network --env DATABASE_URI=postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev --env CAST_SERVICE_HOST_URL=http://cast_service:8000/api/v1/casts/ $DOCKER_ID/$DOCKER_IMAGE_MOVIE:$DOCKER_TAG
+                docker run -d --name movie_service --rm --network test_network --env DATABASE_URI=postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev --env CAST_SERVICE_HOST_URL=http://cast_service:8000/api/v1/casts/ $DOCKER_ID/$DOCKER_IMAGE_MOVIE:$DOCKER_TAG
                 sleep 5
                 docker run -d --name nginx --rm --network test_network --volume "$(PWD)"/nginx_config.conf:/etc/nginx/conf.d/default.conf nginx:latest
                 '''
