@@ -146,6 +146,7 @@ stages {
             }
         }
     }
+}
     post {
         failure {
             sh '''
@@ -158,5 +159,4 @@ stages {
             '''
         }
     }
-}
 }
