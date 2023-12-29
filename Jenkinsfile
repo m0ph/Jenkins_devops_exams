@@ -149,7 +149,7 @@ agent any
     }
     post {
         always {
-         echo 'done'
+            docker stop $(docker ps -a -q)
         }
     }
 }
