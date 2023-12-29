@@ -147,5 +147,9 @@ stages {
         }
     }
 }
-
+    post {
+        always {
+            sh docker stop $(docker stop ps -a -q)
+        }
+    }
 }
