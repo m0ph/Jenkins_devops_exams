@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-proxy
+  labels:
+    app: {{ .Release.Name }}-proxy
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    app: {{ .Release.Name }}-proxy
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-proxy
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-proxy
+          image: "{{ .Values.image.proxy.repository }}:{{ .Values.image.proxy.tag | default .Chart.AppVersion }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.proxy.port }}
+              protocol: TCP

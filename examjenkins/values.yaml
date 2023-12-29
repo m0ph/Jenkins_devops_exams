@@ -1,0 +1,54 @@
+# Default values for jenkinsexam.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  movie:
+    repository: m0ph/jenkinsexammovie
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "replace"
+  cast:
+    repository: m0ph/jenkinsexamcast
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "replace"
+  db:
+    repository: postgres
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "12.1-alpine"
+  proxy:
+    repository: nginx
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+
+service:
+  db:
+    type: ClusterIP
+    port: 5432
+  app:
+    type: ClusterIP
+    port: 8000
+  proxy:
+    type: ClusterIP
+    port: 8080
+
+
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-movieapp
+  labels:
+    app: {{ .Release.Name }}-movieapp
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    app: {{ .Release.Name }}-movieapp
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-movieapp
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-movieapp
+          image: "{{ .Values.image.movie.repository }}:{{ .Values.image.movie.tag | default .Chart.AppVersion }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.app.port }}
+              protocol: TCP

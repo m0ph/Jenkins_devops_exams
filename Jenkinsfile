@@ -70,3 +70,5 @@ stages {
     }
 }
 }
+
+// sed -i "s+tag:.*replace.*+tag: test+g" values.yml

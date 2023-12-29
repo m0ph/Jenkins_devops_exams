@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-moviedb
+  labels:
+    app: {{ .Release.Name }}-moviedb
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    app: {{ .Release.Name }}-moviedb
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-moviedb
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-moviedb
+          image: "{{ .Values.image.db.repository }}:{{ .Values.image.db.tag | default .Chart.AppVersion }}"
+          ports:
+            - name: postgres
+              containerPort: {{ .Values.service.db.port }}
+              protocol: TCP
+
+  

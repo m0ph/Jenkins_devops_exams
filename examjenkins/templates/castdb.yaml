@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-castdb
+  labels:
+    app: {{ .Release.Name }}-castdb
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    app: {{ .Release.Name }}-castdb
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-castdb
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-castdb
+          image: "{{ .Values.image.db.repository }}:12.1-apline"
+          ports:
+            - name: postgres
+              containerPort: {{ .Values.service.db.port }}
+              protocol: TCP
