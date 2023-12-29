@@ -1,13 +1,13 @@
 pipeline {
-environment { 
-DOCKER_ID = "m0ph" 
-DOCKER_IMAGE_CAST = "jenkinsexamcast"
-DOCKER_IMAGE_MOVIE = "jenkinsexammovie"
-DOCKER_TAG = "v.${BUILD_ID}.0"
-}
+    environment { 
+        DOCKER_ID = "m0ph" 
+        DOCKER_IMAGE_CAST = "jenkinsexamcast"
+        DOCKER_IMAGE_MOVIE = "jenkinsexammovie"
+        DOCKER_TAG = "v.${BUILD_ID}.0"
+    }
 agent any
-stages {
-    stage('Docker Build Images'){
+    stages {
+        stage('Docker Build Images'){
         steps {
             script {
                 sh '''
@@ -24,8 +24,8 @@ stages {
                 '''
             }
         }
-    }
-    stage('Docker run'){
+        }
+        stage('Docker run'){
         steps {
             script {
                 sh '''
@@ -40,8 +40,8 @@ stages {
                 '''
             }
         }
-    }
-    stage('Test Connection'){
+        }
+        stage('Test Connection'){
         steps {
             script {
                 sh '''
@@ -52,8 +52,8 @@ stages {
                 '''
             }
         }
-    }
-    stage('Docker push'){
+        }
+        stage('Docker push'){
         environment {
             DOCKER_PASS = credentials("DOCKER_HUB_PASS")
         }
@@ -66,8 +66,8 @@ stages {
                 '''
             }
         }
-    }
-    stage('Deploy to dev'){
+        }
+        stage('Deploy to dev'){
         environment {
             KUBECONFIG = credentials("config")
         }
@@ -85,8 +85,8 @@ stages {
                 '''
             }
         }
-    }
-    stage('Deploy to QA'){
+        }
+        stage('Deploy to QA'){
         environment {
             KUBECONFIG = credentials("config")
         }
@@ -104,8 +104,8 @@ stages {
                 '''
             }
         }
-    }
-    stage('Deploy to Staging'){
+        }
+        stage('Deploy to Staging'){
         environment {
             KUBECONFIG = credentials("config")
         }
@@ -123,8 +123,8 @@ stages {
                 '''
             }
         }
-    }
-    stage('Deploy to Production'){
+        }
+        stage('Deploy to Production'){
         environment {
             KUBECONFIG = credentials("config")
         }
@@ -145,11 +145,11 @@ stages {
                 '''
             }
         }
+        }
     }
-}
-post {
-    always {
-        sh 'docker stop $(docker stop ps -a -q)'
+    post {
+        always {
+         echo 'done'
+        }
     }
-}
 }
